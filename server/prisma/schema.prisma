@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users ───────────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  avatar        String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  bookings      Booking[]
+  reviews       Review[]
+  tripPlans     TripPlan[]
+  blogPosts     BlogPost[]
+  newsletter    NewsletterSubscriber?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// ─── Destinations ─────────────────────────────────────────────────────────────
+
+model Destination {
+  id            String          @id @default(cuid())
+  name          String
+  slug          String          @unique
+  description   String
+  type          DestinationType
+  address       String
+  city          String
+  country       String
+  latitude      Float?
+  longitude     Float?
+  images        String[]
+  pricePerNight Float?
+  amenities     String[]
+  isActive      Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  bookings      Booking[]
+  reviews       Review[]
+  tripItems     TripItem[]
+}
+
+enum DestinationType {
+  HOTEL
+  CAMPSITE
+  ATTRACTION
+}
+
+// ─── Bookings ─────────────────────────────────────────────────────────────────
+
+model Booking {
+  id            String        @id @default(cuid())
+  userId        String
+  destinationId String
+  checkIn       DateTime
+  checkOut      DateTime
+  guests        Int
+  totalPrice    Float
+  status        BookingStatus @default(PENDING)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id])
+  destination   Destination   @relation(fields: [destinationId], references: [id])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+// ─── Reviews ──────────────────────────────────────────────────────────────────
+
+model Review {
+  id            String      @id @default(cuid())
+  userId        String
+  destinationId String
+  rating        Int         // 1–5
+  comment       String
+  createdAt     DateTime    @default(now())
+
+  user          User        @relation(fields: [userId], references: [id])
+  destination   Destination @relation(fields: [destinationId], references: [id])
+}
+
+// ─── Trip Planner ─────────────────────────────────────────────────────────────
+
+model TripPlan {
+  id            String     @id @default(cuid())
+  userId        String
+  title         String
+  startDate     DateTime
+  endDate       DateTime
+  notes         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  user          User       @relation(fields: [userId], references: [id])
+  items         TripItem[]
+}
+
+model TripItem {
+  id            String      @id @default(cuid())
+  tripPlanId    String
+  destinationId String
+  dayNumber     Int
+  order         Int
+  notes         String?
+
+  tripPlan      TripPlan    @relation(fields: [tripPlanId], references: [id])
+  destination   Destination @relation(fields: [destinationId], references: [id])
+}
+
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  authorId    String
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  coverImage  String?
+  tags        String[]
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author      User     @relation(fields: [authorId], references: [id])
+}
+
+// ─── Newsletter ───────────────────────────────────────────────────────────────
+
+model NewsletterSubscriber {
+  id          String   @id @default(cuid())
+  userId      String?  @unique
+  email       String   @unique
+  subscribedAt DateTime @default(now())
+
+  user        User?    @relation(fields: [userId], references: [id])
+}
