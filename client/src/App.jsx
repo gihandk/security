@@ -12,6 +12,12 @@ import BlogPostPage from './pages/BlogPostPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import AdminDestinations from './pages/admin/AdminDestinations.jsx';
+import AdminBookings from './pages/admin/AdminBookings.jsx';
+import AdminBlog from './pages/admin/AdminBlog.jsx';
+import AdminUsers from './pages/admin/AdminUsers.jsx';
+import AdminNewsletter from './pages/admin/AdminNewsletter.jsx';
 
 export default function App() {
   return (
@@ -30,6 +36,12 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/destinations" element={<AdminDestinations />} />
+            <Route path="/admin/bookings" element={<AdminBookings />} />
+            <Route path="/admin/blog" element={<AdminBlog />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/newsletter" element={<AdminNewsletter />} />
           </Routes>
         </main>
         <Footer />

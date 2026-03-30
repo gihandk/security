@@ -24,6 +24,9 @@ export default function Navbar() {
             <>
               <Link to="/bookings" className="hover:text-blue-600">My Bookings</Link>
               <Link to="/profile" className="hover:text-blue-600">{user.name}</Link>
+              {user.role === 'ADMIN' && (
+                <Link to="/admin" className="bg-purple-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-purple-700">Admin</Link>
+              )}
               <button onClick={handleLogout} className="text-red-500 hover:text-red-700">Logout</button>
             </>
           ) : (

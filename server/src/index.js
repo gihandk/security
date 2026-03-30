@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.js';
+import adminRoutes from './routes/admin.js';
 import destinationRoutes from './routes/destinations.js';
 import bookingRoutes from './routes/bookings.js';
 import reviewRoutes from './routes/reviews.js';
@@ -27,6 +28,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
